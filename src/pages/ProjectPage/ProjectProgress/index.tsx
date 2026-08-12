@@ -4,7 +4,6 @@ import { ProjectListProps } from '@/pages/Home/components/PageInformation';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const ProjectProgress = ({ item }: ProjectListProps) => {
-  const isMobile = useMediaQuery('(max-width: 480px)');
   const isTablet = useMediaQuery('(max-width: 768px)');
   const isLaptop = useMediaQuery('(max-width: 1079px)');
 
