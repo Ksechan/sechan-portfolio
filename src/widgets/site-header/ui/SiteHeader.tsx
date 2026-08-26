@@ -1,8 +1,16 @@
 'use client';
 
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { siteConfig } from '@/shared/config/site';
+
+const NAV_LINKS = [
+  { id: 'about', label: 'About' },
+  { id: 'career', label: 'Career' },
+  { id: 'projects', label: 'Projects' },
+] as const;
+
+const HEADER_OFFSET = 96;
 
 const Wrap = styled.header`
   position: fixed;
@@ -25,7 +33,7 @@ const Inner = styled.div`
   justify-content: space-between;
 `;
 
-const Logo = styled(Link)`
+const Logo = styled.a`
   font-family: ${({ theme }) => theme.font.mono};
   font-weight: 700;
   font-size: 15px;
@@ -46,18 +54,20 @@ const Nav = styled.nav`
   display: flex;
   gap: ${({ theme }) => theme.space[5]};
   font-size: 14px;
-  color: ${({ theme }) => theme.color.textSecondary};
-
-  a {
-    transition: color 0.2s ease;
-  }
-
-  a:hover {
-    color: ${({ theme }) => theme.color.textPrimary};
-  }
 
   @media (max-width: 640px) {
     gap: ${({ theme }) => theme.space[3]};
+  }
+`;
+
+const NavLink = styled.a<{ $active: boolean }>`
+  transition: color 0.2s ease;
+  color: ${({ theme, $active }) =>
+    $active ? theme.color.textPrimary : theme.color.textSecondary};
+  font-weight: ${({ $active }) => ($active ? 600 : 400)};
+
+  &:hover {
+    color: ${({ theme }) => theme.color.textPrimary};
   }
 `;
 
@@ -80,13 +90,64 @@ const GithubLink = styled.a`
 `;
 
 export default function SiteHeader() {
+  const [activeId, setActiveId] = useState<string>('about');
+
+  useEffect(() => {
+    const sections = NAV_LINKS.map(({ id }) =>
+      document.getElementById(id),
+    ).filter((el): el is HTMLElement => el !== null);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: `-${HEADER_OFFSET}px 0px -70% 0px`,
+        threshold: 0,
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+  ) => {
+    e.preventDefault();
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <Wrap>
       <Inner>
-        <Logo href="#">{siteConfig.handle}</Logo>
+        <Logo href="#" onClick={handleLogoClick}>
+          {siteConfig.handle}
+        </Logo>
         <Nav>
-          <a href="#projects">Projects</a>
-          <a href="#about">About</a>
+          {NAV_LINKS.map(({ id, label }) => (
+            <NavLink
+              key={id}
+              href={`#${id}`}
+              $active={activeId === id}
+              onClick={(e) => handleNavClick(e, id)}
+            >
+              {label}
+            </NavLink>
+          ))}
         </Nav>
         <GithubLink href={siteConfig.github} target="_blank" rel="noreferrer">
           GitHub ↗

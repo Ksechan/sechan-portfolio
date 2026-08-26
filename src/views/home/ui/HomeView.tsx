@@ -10,7 +10,7 @@ import SiteFooter from '@/widgets/site-footer/ui/SiteFooter';
 import Hero from '@/widgets/hero/ui/Hero';
 import ProjectCard from '@/entities/project/ui/ProjectCard';
 import { projectList } from '@/entities/project/model/data';
-import AboutView from '@/views/about/ui/AboutView';
+import CareerView from '@/views/career/ui/CareerView';
 
 const ProjectsSection = styled.section`
   padding: ${({ theme }) => theme.space[7]} 0;
@@ -35,7 +35,7 @@ export default function HomeView() {
     <>
       <SiteHeader />
       <Hero />
-      <AboutView />
+      <CareerView />
       <ProjectsSection id="projects">
         <Container>
           <SectionTag>projects</SectionTag>

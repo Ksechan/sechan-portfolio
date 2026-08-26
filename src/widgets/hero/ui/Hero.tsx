@@ -1,14 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Container from '@/shared/ui/Container';
-import Button from '@/shared/ui/Button';
 import { siteConfig } from '@/shared/config/site';
 import { fadeInUp, staggerContainer } from '@/shared/lib/motion';
 
 const Section = styled.section`
-  padding: calc(${({ theme }) => theme.space[8]} + 60px) 0 ${({ theme }) => theme.space[7]};
+  padding: calc(${({ theme }) => theme.space[8]} + 60px) 0
+    ${({ theme }) => theme.space[6]};
   position: relative;
 `;
 
@@ -19,7 +19,11 @@ const Glow = styled.div`
   transform: translateX(-50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(circle, rgba(255, 138, 91, 0.16) 0%, transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 138, 91, 0.16) 0%,
+    transparent 65%
+  );
   pointer-events: none;
   z-index: -1;
 `;
@@ -46,6 +50,12 @@ const Eyebrow = styled(motion.div)`
   }
 `;
 
+const gradientFlow = keyframes`
+  to {
+    background-position: 200% center;
+  }
+`;
+
 const Title = styled(motion.h1)`
   font-size: clamp(36px, 6vw, 64px);
   font-weight: 700;
@@ -54,49 +64,81 @@ const Title = styled(motion.h1)`
   max-width: 780px;
 
   span {
-    background: ${({ theme }) => theme.color.gradient};
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.color.primary} 0%,
+      ${({ theme }) => theme.color.accent} 50%,
+      ${({ theme }) => theme.color.primary} 100%
+    );
+    background-size: 200% auto;
+    background-position: 0% center;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: ${gradientFlow} 3s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 `;
 
 const Sub = styled(motion.p)`
-  margin-top: ${({ theme }) => theme.space[4]};
   font-size: 19px;
   color: ${({ theme }) => theme.color.textSecondary};
   max-width: 560px;
   white-space: pre-line;
 `;
 
-const Actions = styled(motion.div)`
-  margin-top: ${({ theme }) => theme.space[5]};
+const IntroWrap = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.space[3]};
+  align-items: baseline;
+  gap: ${({ theme }) => theme.space[2]};
   flex-wrap: wrap;
+  margin-bottom: ${({ theme }) => theme.space[3]};
+
+  p {
+    font-size: 20px;
+    color: ${({ theme }) => theme.color.textSecondary};
+  }
+`;
+
+const IntroList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const IntroItem = styled.li`
+  font-size: 20px;
+  color: ${({ theme }) => theme.color.primary};
+  font-weight: 600;
 `;
 
 export default function Hero() {
   return (
-    <Section>
+    <Section id="about">
       <Glow />
       <Container>
-        <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+        >
           <Eyebrow variants={fadeInUp}>Open to new opportunities</Eyebrow>
           <Title variants={fadeInUp}>
             안녕하세요, {siteConfig.role} <span>{siteConfig.name}</span>입니다.
           </Title>
-          <Sub variants={fadeInUp}>
-            {`변화를 추구하는 사람을 좋아하는 개발문화를 고민하는 엔지니어입니다.\n디자이너와 소통하며 문제를 찾고 해결하는 과정을 즐깁니다.`}
-          </Sub>
-          <Actions variants={fadeInUp}>
-            <Button href="#projects" $variant="primary">
-              프로젝트 보기 →
-            </Button>
-            <Button href="#about" $variant="ghost">
-              소개 보기
-            </Button>
-          </Actions>
+
+          <IntroWrap>
+            <p>* 저는</p>
+            <IntroList>
+              <IntroItem>변화를 추구하는</IntroItem>
+              <IntroItem>사람을 좋아하는</IntroItem>
+              <IntroItem>개발문화를 고민하는</IntroItem>
+            </IntroList>
+          </IntroWrap>
+          <Sub variants={fadeInUp}>{siteConfig.description}</Sub>
         </motion.div>
       </Container>
     </Section>
