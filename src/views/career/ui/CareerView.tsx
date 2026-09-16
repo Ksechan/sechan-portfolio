@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Container from '@/shared/ui/Container';
 import RevealOnScroll from '@/shared/ui/RevealOnScroll';
 import { SectionTag, SectionTitle } from '@/shared/ui/SectionHeading';
-import { projectList } from '@/entities/project/model/data';
+import { careerList } from '@/entities/career/model/data';
 import { siteConfig } from '@/shared/config/site';
 
 const Section = styled.section`
@@ -108,6 +108,13 @@ const ExperienceTitle = styled.h4`
   font-weight: 700;
   color: ${({ theme }) => theme.color.textPrimary};
   transition: color 0.2s ease;
+  margin-bottom: ${({ theme }) => theme.space[1]};
+`;
+
+const ExperienceRole = styled.p`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 12px;
+  color: ${({ theme }) => theme.color.textMuted};
 `;
 
 const ExperienceMeta = styled.p`
@@ -130,14 +137,15 @@ export default function CareerView() {
           <SectionTitle>Career</SectionTitle>
           <RevealOnScroll>
             <ExperienceList>
-              {projectList.map((project) => (
-                <ExperienceItem key={project.id} href="#projects">
+              {careerList.map((career) => (
+                <ExperienceItem key={career.id} href="#projects">
                   <div>
-                    <ExperienceTitle>{project.title}</ExperienceTitle>
+                    <ExperienceTitle>{career.title}</ExperienceTitle>
+                    <ExperienceRole>{career.role}</ExperienceRole>
                   </div>
                   <ExperienceMeta>
-                    <span>{project.period}</span>
-                    <span>{project.tech}</span>
+                    <span>{career.period}</span>
+                    <span>{career.stack.join(', ')}</span>
                   </ExperienceMeta>
                 </ExperienceItem>
               ))}

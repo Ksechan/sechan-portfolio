@@ -10,10 +10,8 @@ export interface ProjectProgressStep {
 
 export interface ProjectDetail {
   stack: string[];
-  mainImages: StaticImageData[];
-  conceptDescriptions: string[];
-  conceptImages: StaticImageData[];
-  progress: ProjectProgressStep[];
+  mainImages?: StaticImageData;
+  mainMovie?: StaticImageData;
 }
 
 export interface Project {
