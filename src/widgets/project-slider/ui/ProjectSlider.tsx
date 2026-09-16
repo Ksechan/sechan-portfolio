@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import ProjectCard from '@/entities/project/ui/ProjectCard';
 import type { Project } from '@/entities/project/model/types';
@@ -24,15 +24,19 @@ const Track = styled.div`
 `;
 
 const Slide = styled.div`
-  flex: 0 0 calc(50% - ${({ theme }) => theme.space[4]} / 2);
+  flex: 0 0 calc((100% - ${({ theme }) => theme.space[4]} * 2) / 3);
   scroll-snap-align: start;
+
+  @media (max-width: 900px) {
+    flex-basis: calc((100% - ${({ theme }) => theme.space[4]}) / 2);
+  }
 
   @media (max-width: 640px) {
     flex-basis: 82%;
   }
 `;
 
-const ArrowButton = styled.button`
+const ArrowButton = styled.button<{ disabled?: boolean }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -47,10 +51,19 @@ const ArrowButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
   z-index: 1;
 
-  &:hover {
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      cursor: not-allowed;
+    `}
+
+  &:not(:disabled):hover {
     border-color: ${({ theme }) => theme.color.accent};
     background: rgba(255, 138, 91, 0.08);
   }
@@ -70,36 +83,42 @@ const NextButton = styled(ArrowButton)`
 
 interface ProjectSliderProps {
   projects: Project[];
-  selectedSlug: string | null;
-  onSelect: (slug: string) => void;
 }
 
-export default function ProjectSlider({ projects, selectedSlug, onSelect }: ProjectSliderProps) {
+export default function ProjectSlider({ projects }: ProjectSliderProps) {
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollByPage = (direction: 1 | -1) => {
     const track = trackRef.current;
     if (!track) return;
+    setCurrentIndex(direction);
     track.scrollBy({ left: direction * track.clientWidth, behavior: 'smooth' });
   };
 
   return (
     <Wrap>
-      <PrevButton type="button" aria-label="이전 프로젝트" onClick={() => scrollByPage(-1)}>
+      <PrevButton
+        type="button"
+        aria-label="이전 프로젝트"
+        onClick={() => scrollByPage(-1)}
+        disabled={currentIndex === -1}
+      >
         ←
       </PrevButton>
       <Track ref={trackRef}>
         {projects.map((project) => (
           <Slide key={project.id}>
-            <ProjectCard
-              project={project}
-              active={project.slug === selectedSlug}
-              onSelect={onSelect}
-            />
+            <ProjectCard project={project} />
           </Slide>
         ))}
       </Track>
-      <NextButton type="button" aria-label="다음 프로젝트" onClick={() => scrollByPage(1)}>
+      <NextButton
+        type="button"
+        aria-label="다음 프로젝트"
+        onClick={() => scrollByPage(1)}
+        disabled={currentIndex === 1}
+      >
         →
       </NextButton>
     </Wrap>

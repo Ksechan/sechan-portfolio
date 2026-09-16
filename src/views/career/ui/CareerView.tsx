@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Container from '@/shared/ui/Container';
 import RevealOnScroll from '@/shared/ui/RevealOnScroll';
 import { SectionTag, SectionTitle } from '@/shared/ui/SectionHeading';
-import { projectList } from '@/entities/project/model/data';
+import { careerList } from '@/entities/career/model/data';
 import { siteConfig } from '@/shared/config/site';
 
 const Section = styled.section`
@@ -108,6 +108,13 @@ const ExperienceTitle = styled.h4`
   font-weight: 700;
   color: ${({ theme }) => theme.color.textPrimary};
   transition: color 0.2s ease;
+  margin-bottom: ${({ theme }) => theme.space[1]};
+`;
+
+const ExperienceRole = styled.p`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 12px;
+  color: ${({ theme }) => theme.color.textMuted};
 `;
 
 const ExperienceMeta = styled.p`
@@ -121,54 +128,24 @@ const ExperienceMeta = styled.p`
   }
 `;
 
-export default function AboutView() {
+export default function CareerView() {
   return (
     <>
-      <Section id="about">
+      <Section id="career">
         <Container>
-          <IntroWrap>
-            <p>* 저는</p>
-            <IntroList>
-              <IntroItem>변화를 추구하는</IntroItem>
-              <IntroItem>사람을 좋아하는</IntroItem>
-              <IntroItem>개발문화를 고민하는</IntroItem>
-            </IntroList>
-            <p>엔지니어입니다.</p>
-          </IntroWrap>
-
-          <Name>{siteConfig.name}</Name>
-
-          <DescText>
-            {`안녕하세요. 2년차 프론트엔드 개발자 김세찬입니다.\n스타트업 '인베스티'에서 약 1년 4개월간 frontend-manager로 근무하였습니다.\n주로 디자이너와 소통하며 문제를 찾고 해결하려고 노력하였으며, 효율적인 협업을 위한 개발역량을 쌓아왔습니다.\n\n아직은 많이 부족하다고 생각하여 다양한 컨텐츠에서 개발 관련 정보 및 강의 시청을 하고 있으며,\n많은 동료들과 함께 성장할 수 있는 좋은 경험을 쌓고 싶습니다.`}
-          </DescText>
-
-          <InfoTable>
-            <dt>GitHub</dt>
-            <dd>
-              <a href={siteConfig.github} target="_blank" rel="noreferrer">
-                {siteConfig.githubHandle}
-              </a>
-            </dd>
-            <dt>Contact</dt>
-            <dd>{siteConfig.phone}</dd>
-            <dt>Email</dt>
-            <dd>
-              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
-            </dd>
-          </InfoTable>
-
-          <SectionTag>experience</SectionTag>
-          <SectionTitle>Experiences</SectionTitle>
+          <SectionTag>career</SectionTag>
+          <SectionTitle>Career</SectionTitle>
           <RevealOnScroll>
             <ExperienceList>
-              {projectList.map((project) => (
-                <ExperienceItem key={project.id} href="#projects">
+              {careerList.map((career) => (
+                <ExperienceItem key={career.id} href="#projects">
                   <div>
-                    <ExperienceTitle>{project.title}</ExperienceTitle>
+                    <ExperienceTitle>{career.title}</ExperienceTitle>
+                    <ExperienceRole>{career.role}</ExperienceRole>
                   </div>
                   <ExperienceMeta>
-                    <span>{project.period}</span>
-                    <span>{project.tech}</span>
+                    <span>{career.period}</span>
+                    <span>{career.stack.join(', ')}</span>
                   </ExperienceMeta>
                 </ExperienceItem>
               ))}

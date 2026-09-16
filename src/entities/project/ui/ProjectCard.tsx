@@ -12,15 +12,17 @@ const Card = styled.button<{ $active: boolean }>`
   text-align: left;
   background: ${({ theme }) => theme.color.bgCard};
   border: 1px solid
-    ${({ theme, $active }) => ($active ? theme.color.accent : theme.color.border)};
+    ${({ theme, $active }) =>
+      $active ? theme.color.accent : theme.color.border};
   border-radius: ${({ theme }) => theme.radius.md};
   overflow: hidden;
-  cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  padding-top: ${({ theme }) => theme.space[5]};
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
     border-color: ${({ theme }) => theme.color.accent};
-    transform: translateY(-4px);
   }
 `;
 
@@ -31,7 +33,7 @@ const Thumb = styled.div`
   background: ${({ theme }) => theme.color.bgElevated};
 
   img {
-    object-fit: cover;
+    object-fit: contain;
   }
 `;
 
@@ -71,14 +73,17 @@ const Tags = styled.div`
 interface ProjectCardProps {
   project: Project;
   active?: boolean;
-  onSelect?: (slug: string) => void;
 }
 
-export default function ProjectCard({ project, active = false, onSelect }: ProjectCardProps) {
-  const thumb = project.detail?.mainImages[0];
+export default function ProjectCard({
+  project,
+  active = false,
+}: ProjectCardProps) {
+  const thumb = project.detail?.mainImages;
+  const mainMovie = project.detail?.mainMovie;
 
   return (
-    <Card type="button" $active={active} onClick={() => onSelect?.(project.slug)}>
+    <Card type="button" $active={active}>
       {thumb && (
         <Thumb>
           <Image
@@ -89,9 +94,19 @@ export default function ProjectCard({ project, active = false, onSelect }: Proje
           />
         </Thumb>
       )}
+      {mainMovie && (
+        <Thumb>
+          <Image
+            src={mainMovie}
+            alt={`${project.title} 대표 이미지`}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+        </Thumb>
+      )}
       <Body>
         <Title>{project.title}</Title>
-        <Desc>{project.description02 ?? project.description}</Desc>
+        <Desc>{project.description}</Desc>
         {project.period && <Period>{project.period}</Period>}
         <Tags>
           {project.detail?.stack.slice(0, 4).map((tech) => (
