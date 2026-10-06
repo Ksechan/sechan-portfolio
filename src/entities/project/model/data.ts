@@ -31,6 +31,7 @@ export const projectList: Project[] = [
       stack: ['React', 'Nextjs', 'Typescript', 'React-native', 'Expo'],
       mainMovie: ShortzMainImage,
     },
+    link: 'https://www.shortz.net/',
   },
   {
     id: 1,
@@ -44,6 +45,7 @@ export const projectList: Project[] = [
       stack: ['React', 'Nextjs', 'Typescript', 'Tanstack-query'],
       mainMovie: WebtoonRunMainImage,
     },
+    link: 'https://www.webtoonrun.com/stadium?page=0&sort=view',
   },
   {
     id: 3,

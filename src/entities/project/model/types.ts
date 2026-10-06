@@ -24,4 +24,5 @@ export interface Project {
   tech?: string;
   type?: ProjectType;
   detail?: ProjectDetail;
+  link?: string;
 }
