@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import type { Project } from '../model/types';
 import TechTag from './TechTag';
 
-const Card = styled.button<{ $active: boolean }>`
+const Card = styled.div<{ $active: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -16,13 +16,38 @@ const Card = styled.button<{ $active: boolean }>`
       $active ? theme.color.accent : theme.color.border};
   border-radius: ${({ theme }) => theme.radius.md};
   overflow: hidden;
-  padding-top: ${({ theme }) => theme.space[5]};
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
 
   &:hover {
     border-color: ${({ theme }) => theme.color.accent};
+  }
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: ${({ theme }) => theme.space[5]};
+  padding: 0 ${({ theme }) => theme.space[3]};
+`;
+
+const LinkIconButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: ${({ theme }) => theme.radius.sm};
+  color: ${({ theme }) => theme.color.textSecondary};
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.color.accent};
+    background: ${({ theme }) => theme.color.bgElevated};
   }
 `;
 
@@ -83,7 +108,33 @@ export default function ProjectCard({
   const mainMovie = project.detail?.mainMovie;
 
   return (
-    <Card type="button" $active={active}>
+    <Card $active={active}>
+      <TopBar>
+        {project.link && (
+          <LinkIconButton
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${project.title} 링크 새 창에서 열기`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </LinkIconButton>
+        )}
+      </TopBar>
       {thumb && (
         <Thumb>
           <Image
