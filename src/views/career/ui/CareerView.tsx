@@ -1,83 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import styled from 'styled-components';
 import Container from '@/shared/ui/Container';
 import RevealOnScroll from '@/shared/ui/RevealOnScroll';
 import { SectionTag, SectionTitle } from '@/shared/ui/SectionHeading';
 import { careerList } from '@/entities/career/model/data';
-import { siteConfig } from '@/shared/config/site';
 
 const Section = styled.section`
   padding: calc(${({ theme }) => theme.space[7]} + 60px) 0
     ${({ theme }) => theme.space[6]};
-`;
-
-const IntroWrap = styled.div`
-  display: flex;
-  align-items: baseline;
-  gap: ${({ theme }) => theme.space[2]};
-  flex-wrap: wrap;
-  margin-bottom: ${({ theme }) => theme.space[5]};
-
-  p {
-    font-size: 20px;
-    color: ${({ theme }) => theme.color.textSecondary};
-  }
-`;
-
-const IntroList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
-const IntroItem = styled.li`
-  font-size: 20px;
-  color: ${({ theme }) => theme.color.primary};
-  font-weight: 600;
-`;
-
-const Name = styled.h1`
-  font-size: clamp(36px, 6vw, 56px);
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.textPrimary};
-  margin-bottom: ${({ theme }) => theme.space[4]};
-`;
-
-const DescText = styled.p`
-  font-size: 16px;
-  line-height: 2;
-  color: ${({ theme }) => theme.color.textSecondary};
-  white-space: pre-line;
-  max-width: 640px;
-  margin-bottom: ${({ theme }) => theme.space[6]};
-`;
-
-const InfoTable = styled.dl`
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  row-gap: ${({ theme }) => theme.space[3]};
-  max-width: 480px;
-  margin-bottom: ${({ theme }) => theme.space[7]};
-
-  dt {
-    font-family: ${({ theme }) => theme.font.mono};
-    font-size: 13px;
-    color: ${({ theme }) => theme.color.textMuted};
-    padding-top: 4px;
-  }
-
-  dd {
-    font-size: 15px;
-    color: ${({ theme }) => theme.color.textPrimary};
-    border-bottom: 1px solid ${({ theme }) => theme.color.border};
-    padding-bottom: ${({ theme }) => theme.space[2]};
-  }
-
-  a:hover {
-    color: ${({ theme }) => theme.color.accent};
-  }
 `;
 
 const ExperienceList = styled.div`
@@ -85,10 +16,9 @@ const ExperienceList = styled.div`
   flex-direction: column;
 `;
 
-const ExperienceItem = styled(Link)`
+const ExperienceItem = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: ${({ theme }) => theme.space[3]};
   padding: ${({ theme }) => theme.space[4]} 0;
   border-bottom: 1px solid ${({ theme }) => theme.color.border};
@@ -101,6 +31,25 @@ const ExperienceItem = styled(Link)`
   &:hover h4 {
     color: ${({ theme }) => theme.color.accent};
   }
+`;
+
+const ExperienceItemRowWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.space[3]};
+  padding: ${({ theme }) => theme.space[4]} 0;
+`;
+
+const ExperienceItemDescription = styled.p`
+  font-size: 14px;
+  color: ${({ theme }) => theme.color.textSecondary};
+  line-height: 1.5;
+  white-space: pre-line;
+`;
+
+const ExperienceTitleWrap = styled.div`
+  flex-shrink: 0;
 `;
 
 const ExperienceTitle = styled.h4`
@@ -138,15 +87,22 @@ export default function CareerView() {
           <RevealOnScroll>
             <ExperienceList>
               {careerList.map((career) => (
-                <ExperienceItem key={career.id} href="#projects">
+                <ExperienceItem key={career.id}>
+                  <ExperienceItemRowWrap>
+                    <ExperienceTitleWrap>
+                      <ExperienceTitle>{career.title}</ExperienceTitle>
+                      <ExperienceRole>{career.role}</ExperienceRole>
+                    </ExperienceTitleWrap>
+                    <ExperienceMeta>
+                      <span>{career.period}</span>
+                      <span>{career.stack.join(', ')}</span>
+                    </ExperienceMeta>
+                  </ExperienceItemRowWrap>
                   <div>
-                    <ExperienceTitle>{career.title}</ExperienceTitle>
-                    <ExperienceRole>{career.role}</ExperienceRole>
+                    <ExperienceItemDescription>
+                      {career.description}
+                    </ExperienceItemDescription>
                   </div>
-                  <ExperienceMeta>
-                    <span>{career.period}</span>
-                    <span>{career.stack.join(', ')}</span>
-                  </ExperienceMeta>
                 </ExperienceItem>
               ))}
             </ExperienceList>

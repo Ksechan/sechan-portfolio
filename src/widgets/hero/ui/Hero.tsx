@@ -95,6 +95,7 @@ const IntroWrap = styled.div`
   align-items: baseline;
   gap: ${({ theme }) => theme.space[2]};
   flex-wrap: wrap;
+  margin-top: ${({ theme }) => theme.space[4]};
   margin-bottom: ${({ theme }) => theme.space[3]};
 
   p {
